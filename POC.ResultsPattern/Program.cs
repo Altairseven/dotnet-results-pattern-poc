@@ -35,8 +35,6 @@ app.UseHttpsRedirection();
 app.UseStatusCodePages();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-app.UseAuthorization();
-
 var apiGroup = app.MapGroup("/api");
 apiGroup.MapPocEndpoints();
 
