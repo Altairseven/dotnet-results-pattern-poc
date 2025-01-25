@@ -1,6 +1,26 @@
-@POC.ResultsPattern_HostAddress = http://localhost:5213
+# Host Address
+@POC.ResultsPattern_HostAddress = https://localhost:7231
 
-GET {{POC.ResultsPattern_HostAddress}}/weatherforecast/
+### Get valid command
+GET {{POC.ResultsPattern_HostAddress}}/api/cmd/valid
 Accept: application/json
 
-###
+### Get invalid command
+GET {{POC.ResultsPattern_HostAddress}}/api/cmd/invalid
+Accept: application/json
+
+### Get valid void command
+GET {{POC.ResultsPattern_HostAddress}}/api/cmd_void/valid
+Accept: application/json
+
+### Get invalid void command
+GET {{POC.ResultsPattern_HostAddress}}/api/cmd_void/invalid
+Accept: application/json
+
+### Query with parameters
+GET {{POC.ResultsPattern_HostAddress}}/api/query?propertyOne={{propertyOne}}&propertyTwo={{propertyTwo}}
+Accept: application/json
+
+### Get command with exception
+GET {{POC.ResultsPattern_HostAddress}}/api/cmd/ex
+Accept: application/json

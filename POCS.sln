@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35617.110 d17.13
+VisualStudioVersion = 17.13.35617.110
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POC.ResultsPattern", "POC.ResultsPattern\POC.ResultsPattern.csproj", "{5670F2A4-7012-772A-0601-7167B3B77B3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCS.AppHost", "POCS.AppHost\POCS.AppHost.csproj", "{FF589F71-AF5B-4522-97AB-BE5A56316311}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POCS.ServiceDefaults", "POCS.ServiceDefaults\POCS.ServiceDefaults.csproj", "{94F29C3A-1DA5-111C-DFA1-A83AE33C6392}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

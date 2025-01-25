@@ -1,4 +1,3 @@
-
 using FluentValidation;
 using POC.ResultsPattern.Behaviors;
 using POC.ResultsPattern.Endpoints;
@@ -9,16 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 builder.Services.AddProblemDetails();
 
 var assemblyToScan = typeof(Program).Assembly;
-
+builder.Services.AddValidatorsFromAssembly(assemblyToScan);
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(assemblyToScan);
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
@@ -26,16 +20,10 @@ builder.Services.AddMediatR(cfg => {
     
 });
 
-builder.Services.AddValidatorsFromAssembly(assemblyToScan);
-
-
-
-
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
