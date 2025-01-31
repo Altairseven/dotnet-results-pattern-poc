@@ -3,13 +3,13 @@ using POC.ResultsPattern.Abstractions;
 
 namespace POC.ResultsPattern.Features;
 
-public record PocCommand(string PropertyOne, string PropertyTwo) : ICommand<PocCommandResponse>;
+public record PocCommand(string ClientId, string PropertyTwo) : ICommand<PocCommandResponse>;
 
 public class PocCommandValidator : AbstractValidator<PocCommand>
 {
     public PocCommandValidator()
     {
-        RuleFor(c => c.PropertyOne).NotEmpty();
+        RuleFor(c => c.ClientId).NotEmpty();
         RuleFor(c => c.PropertyTwo).NotEmpty();
     }
 }
@@ -29,12 +29,33 @@ public class PocCommandHandler : ICommandHandler<PocCommand, PocCommandResponse>
     {
         await Task.Delay(100);
 
-        //I there was no Validator Behavior, i would need to validate like this:
+        //We could run FluentValidations for checking that the request its valid
+        //but we don't need to, because the validationBehavior its running those beforehand
         //var res = await _validator.ValidateAsync(request, cancellationToken);
         //if (!res.IsValid)
         //    return Result<PocCommandResponse>.Failure(res.Errors);
 
 
+        //for scenarios where we check database or external APIs, and its response represent a flow failure
+        //we use defined errors (this could belong to the use case, or the domain object).
+        if (request.ClientId == "Value3")
+            return Result<PocCommandResponse>.Failure(PocErrors.ClientNotExists);
+
+        if (request.ClientId == "Value4")
+            return Result<PocCommandResponse>.Failure(PocErrors.ClientDeactivated);
+
         return Result<PocCommandResponse>.Success(new PocCommandResponse("Success"));
     }
+}
+
+public static class PocErrors {
+
+    public static readonly Error ClientNotExists = new(
+        "Client.NotExists",
+        "The client with the specified id was not found");
+
+    public static readonly Error ClientDeactivated = new(
+        "Client.NotActive",
+        "The client account its not active");
+
 }

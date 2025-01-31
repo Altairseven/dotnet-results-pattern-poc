@@ -31,7 +31,7 @@ public class ErrorHandlingMiddleware(RequestDelegate _next, ILogger<ErrorHandlin
                 InfrastructureException notFoundEx => new ProblemDetails
                 {
                     Title = "Infrastructure Error",
-                    Status = 400,
+                    Status = 500,
                     Detail = notFoundEx.Message,
                     Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
                 },

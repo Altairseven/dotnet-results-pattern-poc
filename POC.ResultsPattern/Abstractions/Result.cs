@@ -1,8 +1,4 @@
-﻿using FluentValidation.Results;
-using Google.Protobuf.WellKnownTypes;
-using MediatR;
-
-namespace POC.ResultsPattern.Abstractions;
+﻿namespace POC.ResultsPattern.Abstractions;
 
 public class Result {
 
@@ -12,9 +8,9 @@ public class Result {
     public IReadOnlyList<string> ValidationErrors { get; init; } = default!;
 
     public static Result Success() => new Result(true, default!);
-    public static Result Failure(string message) => new Result(false, message);
+    public static Result Failure(Error error) => new Result(false, MapErrorMessage(error));
 
-    public static Result Failure(List<ValidationFailure> validationErrors) => new Result(false, "Invalid property values", MapValidationErrors(validationErrors));
+    public static Result Failure(ValidationError error) => new Result(false, MapErrorMessage(error), error.ValidationErrors);
 
     protected Result(bool isSuccess, string errorMessage, List<string>? validationErrors = null)
     {
@@ -23,9 +19,8 @@ public class Result {
         ValidationErrors = validationErrors?.ToList().AsReadOnly() ?? new List<string>().AsReadOnly();
     }
 
-    protected static List<string> MapValidationErrors(List<ValidationFailure> errors) 
-    {
-        return errors.Select(x => x.ErrorMessage).ToList();
+    protected static string MapErrorMessage(Error error) {
+        return $"{error.Code} - {error.Name}";
     }
 }
 
@@ -34,10 +29,10 @@ public class Result<T> : Result
     public T? Value { get; init; }
 
     public static Result<T> Success(T value = default!) => new Result<T>(true, value, default!);
-    public new static Result<T> Failure(string message) => new Result<T>(false, default, message);
+    public new static Result<T> Failure(Error error) => new Result<T>(false, default, MapErrorMessage(error));
 
-    public new static Result<T> Failure(List<ValidationFailure> validationErrors) => 
-        new Result<T>(false, default, "Invalid property values", MapValidationErrors(validationErrors));
+    public new static Result<T> Failure(ValidationError error) => 
+        new Result<T>(false, default, MapErrorMessage(error), error.ValidationErrors);
 
     private Result(
         bool isSuccess, 

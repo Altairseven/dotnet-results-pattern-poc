@@ -48,14 +48,28 @@ public class ValidationBehavior<TRequest, TResponse>
 
         if (responseType == typeof(Result))
         {
-            return Result.Failure(validationErrors);
+            return Result.Failure(
+                new ValidationError(
+                    validationErrors
+                        .Select(x => x.ErrorMessage)
+                        .ToList()
+                )
+            );
         }
 
         if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(Result<>))
         {
+            var error = new ValidationError(
+                validationErrors
+                    .Select(x => x.ErrorMessage)
+                    .ToList()
+            );
+
+            var asd = error.ToString();
+
             var genericType = responseType.GetGenericArguments()[0];
-            var failureMethod = typeof(Result<>).MakeGenericType(genericType).GetMethod("Failure", new[] { typeof(List<ValidationFailure>) });
-            return failureMethod!.Invoke(null, new object[] { validationErrors })!;
+            var failureMethod = typeof(Result<>).MakeGenericType(genericType).GetMethod("Failure", new[] { typeof(ValidationError) });
+            return failureMethod!.Invoke(null, new object[] { error })!;
         }
 
         throw new InvalidOperationException("Unsupported response type");
