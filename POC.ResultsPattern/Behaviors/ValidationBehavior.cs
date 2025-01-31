@@ -65,8 +65,6 @@ public class ValidationBehavior<TRequest, TResponse>
                     .ToList()
             );
 
-            var asd = error.ToString();
-
             var genericType = responseType.GetGenericArguments()[0];
             var failureMethod = typeof(Result<>).MakeGenericType(genericType).GetMethod("Failure", new[] { typeof(ValidationError) });
             return failureMethod!.Invoke(null, new object[] { error })!;
